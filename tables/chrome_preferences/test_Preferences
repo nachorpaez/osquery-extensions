@@ -1,0 +1,42 @@
+{
+    "profile": {
+        "content_settings": {
+            "exceptions": {
+                "geolocation": {
+                    "https://test.com:443,*": {
+                        "last_modified": "13359398812209250",
+                        "setting": 2,
+                        "model": 0
+                    }
+                },
+                "media_stream_camera": {
+                    "https://meet.google.com:443,*": {
+                        "last_modified": "13357248819111798",
+                        "last_visit": "13357008000000000",
+                        "model": 0,
+                        "setting": 1
+                    }
+                },
+                "media_stream_mic": {
+                    "https://meet.google.com:443,*": {
+                        "last_modified": "13357248797611836",
+                        "last_visit": "13357008000000000",
+                        "model": 1,
+                        "setting": 1
+                    }
+                },
+                "notifications": {
+                    "https://meet.google.com:443,*": {
+                        "last_modified": "13357248805228331",
+                        "setting": 1
+                    }
+                },
+                "popups": {
+                    "https://www.digicert.com:443,*": {
+                        "setting": 1
+                    }
+                }
+            }
+        }
+    }
+}

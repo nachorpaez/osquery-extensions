@@ -1,0 +1,37 @@
+{
+    "net": {
+        "http_server_properties": {
+            "broken_alternative_services": [
+
+                {
+                    "anonymization": [
+                        "OAAAADMAAABjaHJvbWUtZXh0ZW5zaW9uOi8vYWVibGZka2hoaGRjZGpwaWZoaGJkaW9qcGxmam5jb2EA",
+                        false
+                    ],
+                    "broken_count": 5,
+                    "host": "b5x-sentry.1passwordservices.com",
+                    "port": 443,
+                    "protocol_str": "quic"
+                }
+            ],
+            "servers": [
+                {
+                    "anonymization": [
+                        "OAAAADMAAABjaHJvbWUtZXh0ZW5zaW9uOi8vYWVibGZka2hoaGRjZGpwaWZoaGJkaW9qcGxmam5jb2EA",
+                        false
+                    ],
+                    "server": "https://my.1password.com",
+                    "supports_spdy": true
+                },
+                {
+                    "anonymization": [
+                        "OAAAADMAAABjaHJvbWUtZXh0ZW5zaW9uOi8vZGdqaGZvbWppZWFhZHBvbGpsbmlkbWJna2RmZnBhY2sA",
+                        false
+                    ],
+                    "server": "http://github.com",
+                    "supports_spdy": true
+                }
+            ]
+        }
+    }
+}
