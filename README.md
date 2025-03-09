@@ -1,6 +1,7 @@
 # Osquery Extension
 
-Use Osquery to gather data about the installed VSCode extensions on a host.
+## Project Summary
+This project provides custom Osquery tables that enhance the default Osquery functionality on macOS and Windows. These tables can help with forensics, compliance, and security investigations by extracting critical configuration and usage data from local installations.
 
 ## Usage
 For testing, you can load the extension with `osqueryi`.
