@@ -1,34 +1,49 @@
 all: build
 
-APP_NAME = vscode.ext
+APP_NAME = osquery_extension
+PACKAGE_VERSION= 0.0.2
 PKGDIR_TMP = ${TMPDIR}golang
 
-.pre-build:
-	mkdir -p build
-
 init:
-	go mod init github.com/nachorpaez/osquery-vscode-extension
+	go mod init github.com/nachorpaez/osquery-extensions
 
-download:
+.PHONY: deps
+deps:
 	go mod download
+	go mod verify
+	go mod vendor
+	go mod tidy
+
+.PHONY: .pre-build
+.pre-build: clean
+	mkdir -p build/darwin
+	mkdir -p build/windows
+	mkdir -p build/linux
 
 clean:
 	rm -rf build/
 	rm -rf ${PKGDIR_TMP}_darwin
 
+.PHONY: test
 test:
-	go test -v ./... 
+	go test -v ./...
 
-build: .pre-build
-	GOOS=darwin GOARCH=amd64 go build -o build/darwin/${APP_NAME}-amd64 -pkgdir ${PKGDIR_TMP}
-	GOOS=darwin GOARCH=arm64 go build -o build/darwin/${APP_NAME}-arm64 -pkgdir ${PKGDIR_TMP}
-	lipo -create -output build/darwin/${APP_NAME} build/darwin/${APP_NAME}-amd64 build/darwin/${APP_NAME}-arm64
-	GOOS=windows GOARCH=amd64  go build -o build/windows/${APP_NAME}.amd64.ext
-	GOOS=windows GOARCH=arm64  go build -o build/windows/${APP_NAME}.arm64.ext
-	GOOS=linux GOARCH=amd64  go build -o build/linux/${APP_NAME}.amd64.ext
-	/bin/rm build/darwin/${APP_NAME}-amd64
-	/bin/rm build/darwin/${APP_NAME}-arm64
+.PHONY:
+apple: build/darwin/$(APP_NAME).ext
+build/darwin/$(APP_NAME).ext: tables/**/*.go pkg/**/*.go main.go
+	@mkdir -p $(@D)
+	GOOS=darwin GOARCH=amd64 CGO_ENABLE=0 go build -o build/darwin/$(APP_NAME).amd64 -ldflags "-X main.packageVersion=$(PACKAGE_VERSION)"
+	GOOS=darwin GOARCH=arm64 CGO_ENABLE=0 go build -o build/darwin/$(APP_NAME).arm64 -ldflags "-X main.packageVersion=$(PACKAGE_VERSION)"
+	lipo -create -output build/darwin/$(APP_NAME).ext build/darwin/$(APP_NAME).amd64 build/darwin/$(APP_NAME).arm64
 
-osqueryi: build
+.PHONY:
+win: build/windows/$(APP_NAME).ext.exe
+build/windows/$(APP_NAME).ext.exe: tables/**/*.go pkg/**/*.go main.go
+	@mkdir -p $(@D)
+	GOOS=windows GOARCH=amd64 CGO_ENABLE=0 go build -o $(@) -ldflags "-X main.packageVersion=$(PACKAGE_VERSION)"
+
+.PHONY:
+osqueryi: build/darwin/$(APP_NAME).ext
+	@echo build/darwin/$(APP_NAME).ext > build/darwin/extensions.load
 	sleep 2
-	osqueryi --extension=build/darwin/vscode.ext --allow_unsafe
+	sudo osqueryi --verbose --extensions_autoload=build/darwin/extensions.load --allow_unsafe
